@@ -19,10 +19,9 @@ class Agent:
         probabilities = exp_values / np.sum(exp_values)
         return np.random.choice(len(q_values), p=probabilities)
 
-    
     def act(self, state):
         if np.random.rand() <= self.epsilon:
-            return self.boltman_exploration(np.zeros(self.action_size))
+            return self.boltzman_exploration(np.zeros(self.action_size))
         act_values = self.model.predict(state)
         return np.argmax(act_values[0])
     
