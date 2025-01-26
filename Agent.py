@@ -11,12 +11,14 @@ class Agent:
         self.epsilon = epsilon
         self.epsilon_min = epsilon_min
         self.epsilon_decay = epsilon_decay
-        self.model = DeepQNetwork(state_size, action_size)
-        
-    def boltman_exploration(self, q_values, temperature= 1.0):
-        scaled_q_values = q_values / temperature
-        probabilities = np.exp(scaled_q_values) / np.sum(np.exp(scaled_q_values))
-        return np.random.choice(len(q_values), p= probabilities)
+        self.model = DeepQNetwork(state_size, action_size)       
+    
+    def boltzman_exploration(self, q_values, temperature=1.0):
+        scaled_q_values = q_values / max(temperature, 1e-6)  
+        exp_values = np.exp(scaled_q_values - np.max(scaled_q_values)) 
+        probabilities = exp_values / np.sum(exp_values)
+        return np.random.choice(len(q_values), p=probabilities)
+
     
     def act(self, state):
         if np.random.rand() <= self.epsilon:

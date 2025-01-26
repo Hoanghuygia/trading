@@ -1,7 +1,5 @@
 import tensorflow as tf
 import os
-import numpy as np
-import pandas as pd
 
 class DeepQNetwork(object):
     def __init__(self, state_size, action_size, lr= 0.001, chkpt_dir= 'tmp/dqn'):
@@ -27,19 +25,21 @@ class DeepQNetwork(object):
         model.compile(loss="huber_loss", 
             optimizer= tf.keras.optimizers.Adam(learning_rate= self.lr))
         return model
-    
+      
     def predict(self, state):
-        return self.model.predict(state)
+        return self.model(state).numpy()
+
     
     def fit(self, state, target, epochs= 1, verbose= 0):
         return self.model.fit(state, target, epochs=epochs, verbose=verbose)
     
     def load_checkpoint(self):
         print("... Loading checkpoint ...")
-        self.saver.restore(self.checkpoint_file)
-        
+        self.model.load_weights(self.checkpoint_file)
+
     def save_checkpoint(self):
         print("... Saving checkpoint ...")
-        self.saver.save(self.checkpoint_file)
+        self.model.save_weights(self.checkpoint_file)
+
         
 

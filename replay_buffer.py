@@ -5,12 +5,10 @@ class ReplayBuffer:
         self.memory = []
         self.priorites = []
         self.capacity = capacity
-        
+               
     def add(self, experience, priority):
-        if len(self.memory) < self.capacity:
-            self.memory.append(experience)
-            self.priorites.append(priority)
-        else:
-            idx = np.argmin(self.priorites)
-            self.memory[idx] = experience
-            self.priorites[idx] = priority
+        if len(self.memory) >= self.capacity:
+            self.memory.pop(0)
+            self.priorites.pop(0)
+        self.memory.append(experience)
+        self.priorites.append(priority)
